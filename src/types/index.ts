@@ -1,0 +1,47 @@
+export interface IProduct {
+  _id: string;
+  name: string;
+  description: string;
+  price: number;
+  category: ProductCategory;
+  image: string;
+  createdAt: string;
+}
+
+export type ProductCategory =
+  | "keyboards"
+  | "mice"
+  | "headsets"
+  | "controllers"
+  | "accessories";
+
+export const PRODUCT_CATEGORIES: { value: ProductCategory; label: string }[] = [
+  { value: "keyboards", label: "Keyboards" },
+  { value: "mice", label: "Mice" },
+  { value: "headsets", label: "Headsets" },
+  { value: "controllers", label: "Controllers" },
+  { value: "accessories", label: "Accessories" },
+];
+
+export interface ICartItem {
+  product: IProduct;
+  quantity: number;
+}
+
+export interface IOrderProduct {
+  productId: string;
+  name: string;
+  price: number;
+  quantity: number;
+}
+
+export interface IOrder {
+  _id: string;
+  products: IOrderProduct[];
+  totalPrice: number;
+  customerName: string;
+  customerEmail: string;
+  paymentStatus: "pending" | "completed" | "failed";
+  paypalOrderId?: string;
+  createdAt: string;
+}
