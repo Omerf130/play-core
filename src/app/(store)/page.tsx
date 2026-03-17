@@ -5,6 +5,8 @@ import ProductGrid from "@/components/store/ProductGrid/ProductGrid";
 import { IProduct } from "@/types";
 import styles from "./page.module.scss";
 
+export const dynamic = "force-dynamic";
+
 async function getFeaturedProducts(): Promise<IProduct[]> {
   await dbConnect();
   const products = await Product.find().sort({ createdAt: -1 }).limit(4).lean();
