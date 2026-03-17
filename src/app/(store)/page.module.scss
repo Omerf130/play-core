@@ -88,6 +88,33 @@
   }
 }
 
+.featured {
+  padding: 40px 0 80px;
+}
+
+.sectionHeader {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 32px;
+
+  h2 {
+    font-size: 28px;
+    font-weight: 700;
+  }
+}
+
+.viewAll {
+  font-size: 14px;
+  font-weight: 500;
+  color: var(--accent);
+  transition: opacity 0.2s;
+
+  &:hover {
+    opacity: 0.8;
+  }
+}
+
 @media (max-width: 768px) {
   .hero {
     padding: 40px 0;
@@ -109,5 +136,9 @@
   .primaryBtn,
   .secondaryBtn {
     justify-content: center;
+  }
+
+  .sectionHeader h2 {
+    font-size: 22px;
   }
 }
