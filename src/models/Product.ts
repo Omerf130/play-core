@@ -18,7 +18,7 @@ const ProductSchema = new Schema<ProductDocument>(
     category: {
       type: String,
       required: true,
-      enum: ["keyboards", "mice", "headsets", "controllers", "accessories"],
+      enum: ["keyboards", "mice", "headsets", "controllers", "accessories", "computers", "chairs"],
     },
     image: { type: String, default: "" },
   },

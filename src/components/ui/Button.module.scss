@@ -20,10 +20,12 @@
 .primary {
   background: var(--accent);
   color: var(--bg-primary);
+  box-shadow: 0 0 10px rgba(0, 255, 255, 0.1);
 
   &:hover:not(:disabled) {
     background: var(--accent-hover);
     box-shadow: var(--shadow-glow);
+    transform: translateY(-1px);
   }
 }
 

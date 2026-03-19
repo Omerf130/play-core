@@ -13,13 +13,17 @@ export type ProductCategory =
   | "mice"
   | "headsets"
   | "controllers"
-  | "accessories";
+  | "accessories"
+  | "computers"
+  | "chairs";
 
 export const PRODUCT_CATEGORIES: { value: ProductCategory; label: string }[] = [
   { value: "keyboards", label: "Keyboards" },
   { value: "mice", label: "Mice" },
   { value: "headsets", label: "Headsets" },
   { value: "controllers", label: "Controllers" },
+  { value: "computers", label: "Computers" },
+  { value: "chairs", label: "Chairs" },
   { value: "accessories", label: "Accessories" },
 ];
 

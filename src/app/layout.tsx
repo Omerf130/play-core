@@ -1,15 +1,16 @@
 import type { Metadata } from "next";
-import { Geist, Geist_Mono } from "next/font/google";
+import { Orbitron, Inter } from "next/font/google";
 import { Toaster } from "react-hot-toast";
 import "./globals.scss";
 
-const geistSans = Geist({
-  variable: "--font-geist-sans",
+const orbitron = Orbitron({
+  variable: "--font-heading",
   subsets: ["latin"],
+  weight: ["400", "500", "600", "700", "800", "900"],
 });
 
-const geistMono = Geist_Mono({
-  variable: "--font-geist-mono",
+const inter = Inter({
+  variable: "--font-body",
   subsets: ["latin"],
 });
 
@@ -25,7 +26,7 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <body className={`${geistSans.variable} ${geistMono.variable}`}>
+      <body className={`${orbitron.variable} ${inter.variable}`}>
         {children}
         <Toaster
           position="bottom-right"
@@ -34,12 +35,13 @@ export default function RootLayout({
             style: {
               background: "#1a1a2e",
               color: "#e8e8f0",
-              border: "1px solid #2a2a3e",
+              border: "1px solid rgba(0, 255, 255, 0.15)",
               borderRadius: "10px",
+              boxShadow: "0 0 20px rgba(0, 255, 255, 0.08)",
             },
             success: {
               iconTheme: {
-                primary: "#00f0ff",
+                primary: "#00ffff",
                 secondary: "#0a0a0f",
               },
             },
