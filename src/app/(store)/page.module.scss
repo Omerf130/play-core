@@ -147,6 +147,82 @@
   }
 }
 
+.perks {
+  padding: 60px 0 80px;
+  border-top: 1px solid var(--border);
+  text-align: center;
+}
+
+.perksTitle {
+  font-size: 28px;
+  font-weight: 700;
+  margin-bottom: 40px;
+}
+
+.perksGrid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 32px;
+  margin-bottom: 40px;
+}
+
+.perkCard {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 12px;
+  padding: 24px 16px;
+
+  h3 {
+    font-size: 16px;
+    font-weight: 700;
+    color: var(--text-primary);
+  }
+
+  p {
+    font-size: 14px;
+    line-height: 1.6;
+    color: var(--text-secondary);
+    max-width: 260px;
+  }
+}
+
+.perkIcon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 64px;
+  height: 64px;
+  margin-bottom: 4px;
+  color: var(--accent);
+  filter: drop-shadow(0 0 10px var(--accent-glow));
+}
+
+.perksAction {
+  display: flex;
+  justify-content: center;
+}
+
+.faqLink {
+  display: inline-flex;
+  align-items: center;
+  padding: 12px 28px;
+  font-size: 13px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: var(--text-primary);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-md);
+  transition: all 0.3s;
+
+  &:hover {
+    border-color: var(--accent);
+    color: var(--accent);
+    box-shadow: var(--shadow-glow-sm);
+  }
+}
+
 @media (max-width: 768px) {
   .hero {
     padding: 40px 0;
@@ -177,5 +253,19 @@
 
   .sectionHeader h2 {
     font-size: 22px;
+  }
+
+  .perks {
+    padding: 40px 0 60px;
+  }
+
+  .perksTitle {
+    font-size: 22px;
+    margin-bottom: 28px;
+  }
+
+  .perksGrid {
+    grid-template-columns: 1fr;
+    gap: 16px;
   }
 }
