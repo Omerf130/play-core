@@ -23,6 +23,7 @@ export default function Button({
     <button
       className={`${styles.button} ${styles[variant]} ${styles[size]} ${fullWidth ? styles.fullWidth : ""} ${className || ""}`}
       disabled={disabled || loading}
+      suppressHydrationWarning
       {...props}
     >
       {loading ? <span className={styles.spinner} /> : children}

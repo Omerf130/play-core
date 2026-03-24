@@ -1,5 +1,6 @@
 "use client";
 
+import { forwardRef } from "react";
 import styles from "./Input.module.scss";
 
 interface InputProps extends React.InputHTMLAttributes<HTMLInputElement> {
@@ -7,13 +8,10 @@ interface InputProps extends React.InputHTMLAttributes<HTMLInputElement> {
   error?: string;
 }
 
-export default function Input({
-  label,
-  error,
-  className,
-  id,
-  ...props
-}: InputProps) {
+const Input = forwardRef<HTMLInputElement, InputProps>(function Input(
+  { label, error, className, id, ...props },
+  ref
+) {
   const inputId = id || label?.toLowerCase().replace(/\s+/g, "-");
 
   return (
@@ -24,11 +22,15 @@ export default function Input({
         </label>
       )}
       <input
+        ref={ref}
         id={inputId}
         className={`${styles.input} ${error ? styles.inputError : ""}`}
+        suppressHydrationWarning
         {...props}
       />
       {error && <span className={styles.error}>{error}</span>}
     </div>
   );
-}
+});
+
+export default Input;
