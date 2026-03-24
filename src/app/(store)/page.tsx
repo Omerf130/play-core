@@ -27,10 +27,17 @@ async function getHeroImage(): Promise<string | null> {
   return content?.value ?? null;
 }
 
+async function getBottomHeroImage(): Promise<string | null> {
+  await dbConnect();
+  const content = await SiteContent.findOne({ key: "bottom_hero_image" }).lean();
+  return content?.value ?? null;
+}
+
 export default async function Home() {
-  const [featured, heroImage] = await Promise.all([
+  const [featured, heroImage, bottomHeroImage] = await Promise.all([
     getFeaturedProducts(),
     getHeroImage(),
+    getBottomHeroImage(),
   ]);
 
   return (
@@ -112,6 +119,24 @@ export default async function Home() {
           </Link>
         </div>
       </section>
+
+      {bottomHeroImage && (
+        <section
+          className={styles.bottomHero}
+          style={{ backgroundImage: `url(${bottomHeroImage})` }}
+        >
+          <div className={styles.bottomHeroOverlay} />
+          <div className={styles.bottomHeroContent}>
+            <h2 className={styles.bottomHeroTitle}>Got Questions?</h2>
+            <p className={styles.bottomHeroSubtitle}>
+              We&apos;re here to help you find the perfect gear for your setup.
+            </p>
+            <Link href="/contact" className={styles.contactBtn}>
+              Contact Us
+            </Link>
+          </div>
+        </section>
+      )}
     </>
   );
 }
