@@ -7,6 +7,7 @@ export interface ProductDocument extends mongoose.Document {
   price: number;
   category: ProductCategory;
   image: string;
+  isPromoted: boolean;
   createdAt: Date;
 }
 
@@ -21,6 +22,7 @@ const ProductSchema = new Schema<ProductDocument>(
       enum: ["keyboards", "mice", "headsets", "controllers", "accessories", "computers", "chairs"],
     },
     image: { type: String, default: "" },
+    isPromoted: { type: Boolean, default: false },
   },
   {
     timestamps: true,

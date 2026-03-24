@@ -13,6 +13,7 @@ export default function AdminProductsPage() {
   const [editProduct, setEditProduct] = useState<IProduct | undefined>();
   const [deleteTarget, setDeleteTarget] = useState<IProduct | null>(null);
   const [deleting, setDeleting] = useState(false);
+  const [togglingId, setTogglingId] = useState<string | null>(null);
 
   const fetchProducts = useCallback(async () => {
     try {
@@ -44,6 +45,22 @@ export default function AdminProductsPage() {
     setShowForm(false);
     setEditProduct(undefined);
     fetchProducts();
+  };
+
+  const handleTogglePromoted = async (product: IProduct) => {
+    setTogglingId(product._id);
+    try {
+      await fetch(`/api/products/${product._id}`, {
+        method: "PUT",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ isPromoted: !product.isPromoted }),
+      });
+      fetchProducts();
+    } catch (err) {
+      console.error("Failed to toggle promoted:", err);
+    } finally {
+      setTogglingId(null);
+    }
   };
 
   const handleDelete = async () => {
@@ -84,6 +101,7 @@ export default function AdminProductsPage() {
                 <th>Name</th>
                 <th>Category</th>
                 <th>Price</th>
+                <th>Featured</th>
                 <th>Actions</th>
               </tr>
             </thead>
@@ -108,6 +126,16 @@ export default function AdminProductsPage() {
                   </td>
                   <td className={styles.priceCell}>
                     ${product.price.toFixed(2)}
+                  </td>
+                  <td>
+                    <button
+                      className={`${styles.toggle} ${product.isPromoted ? styles.toggleOn : ""}`}
+                      onClick={() => handleTogglePromoted(product)}
+                      disabled={togglingId === product._id}
+                      title={product.isPromoted ? "Remove from featured" : "Add to featured"}
+                    >
+                      <span className={styles.toggleKnob} />
+                    </button>
                   </td>
                   <td>
                     <div className={styles.actions}>

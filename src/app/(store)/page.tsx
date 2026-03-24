@@ -9,12 +9,21 @@ export const dynamic = "force-dynamic";
 
 async function getFeaturedProducts(): Promise<IProduct[]> {
   await dbConnect();
-  const products = await Product.find().sort({ createdAt: -1 }).limit(4).lean();
+  let products = await Product.find({ isPromoted: true })
+    .sort({ createdAt: -1 })
+    .lean();
+
+  if (products.length === 0) {
+    products = await Product.find().sort({ createdAt: -1 }).lean();
+  }
+
   return JSON.parse(JSON.stringify(products));
 }
 
 export default async function Home() {
   const featured = await getFeaturedProducts();
+
+  console.log(featured);
 
   return (
     <>

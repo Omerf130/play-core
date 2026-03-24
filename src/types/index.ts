@@ -5,6 +5,7 @@ export interface IProduct {
   price: number;
   category: ProductCategory;
   image: string;
+  isPromoted: boolean;
   createdAt: string;
 }
 

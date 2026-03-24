@@ -121,6 +121,45 @@
   color: var(--text-primary);
 }
 
+.toggle {
+  position: relative;
+  width: 40px;
+  height: 22px;
+  background: var(--bg-secondary);
+  border: 1px solid var(--border);
+  border-radius: 11px;
+  cursor: pointer;
+  transition: all 0.25s;
+  padding: 0;
+
+  &:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+  }
+}
+
+.toggleOn {
+  background: rgba(0, 255, 255, 0.15);
+  border-color: rgba(0, 255, 255, 0.4);
+}
+
+.toggleKnob {
+  position: absolute;
+  top: 2px;
+  left: 2px;
+  width: 16px;
+  height: 16px;
+  background: var(--text-muted);
+  border-radius: 50%;
+  transition: all 0.25s;
+
+  .toggleOn & {
+    left: 20px;
+    background: var(--accent);
+    box-shadow: 0 0 8px var(--accent-glow);
+  }
+}
+
 .actions {
   display: flex;
   gap: 8px;

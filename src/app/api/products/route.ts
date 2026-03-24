@@ -34,7 +34,7 @@ export async function POST(request: NextRequest) {
     await dbConnect();
 
     const body = await request.json();
-    const { name, description, price, category, image } = body;
+    const { name, description, price, category, image, isPromoted } = body;
 
     if (!name || !description || price == null || !category) {
       return NextResponse.json(
@@ -49,6 +49,7 @@ export async function POST(request: NextRequest) {
       price,
       category,
       image: image || "",
+      isPromoted: isPromoted || false,
     });
 
     return NextResponse.json(product, { status: 201 });

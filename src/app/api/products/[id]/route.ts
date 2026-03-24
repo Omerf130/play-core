@@ -37,11 +37,18 @@ export async function PUT(request: NextRequest, { params }: RouteParams) {
     }
 
     const body = await request.json();
-    const { name, description, price, category, image } = body;
+
+    const updateFields: Record<string, unknown> = {};
+    const allowedFields = ["name", "description", "price", "category", "image", "isPromoted"];
+    for (const field of allowedFields) {
+      if (body[field] !== undefined) {
+        updateFields[field] = body[field];
+      }
+    }
 
     const product = await Product.findByIdAndUpdate(
       id,
-      { name, description, price, category, image },
+      updateFields,
       { new: true, runValidators: true }
     ).lean();
 
