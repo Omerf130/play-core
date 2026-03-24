@@ -1,6 +1,8 @@
 import type { Metadata } from "next";
 import { Orbitron, Inter } from "next/font/google";
 import { Toaster } from "react-hot-toast";
+import { LanguageProvider } from "@/contexts/LanguageContext";
+import { getLocaleFromCookies } from "@/lib/i18n";
 import "./globals.scss";
 
 const orbitron = Orbitron({
@@ -19,15 +21,19 @@ export const metadata: Metadata = {
   description: "Premium gaming peripherals for competitive players",
 };
 
-export default function RootLayout({
+export default async function RootLayout({
   children,
 }: Readonly<{
   children: React.ReactNode;
 }>) {
+  const locale = await getLocaleFromCookies();
+
   return (
-    <html lang="en">
+    <html lang={locale} dir={locale === "he" ? "rtl" : "ltr"} suppressHydrationWarning>
       <body className={`${orbitron.variable} ${inter.variable}`}>
-        {children}
+        <LanguageProvider initialLocale={locale}>
+          {children}
+        </LanguageProvider>
         <Toaster
           position="bottom-right"
           toastOptions={{

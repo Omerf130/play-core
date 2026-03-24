@@ -4,6 +4,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { useCart } from "@/store/cart";
 import type { IProduct } from "@/types";
+import { useTranslation } from "@/contexts/LanguageContext";
 import toast from "react-hot-toast";
 import styles from "./ProductDetail.module.scss";
 
@@ -13,16 +14,19 @@ interface ProductDetailProps {
 
 export default function ProductDetail({ product }: ProductDetailProps) {
   const addItem = useCart((s) => s.addItem);
+  const { t, dir } = useTranslation();
 
   const handleAddToCart = () => {
     addItem(product);
-    toast.success(`${product.name} added to cart`);
+    toast.success(t.productDetail.addedToCart(product.name));
   };
+
+  const categoryLabel = t.common.categories[product.category] || product.category;
 
   return (
     <div className={styles.page}>
       <Link href="/products" className={styles.back}>
-        &larr; Back to Products
+        {dir === "rtl" ? "\u2192" : "\u2190"} {t.productDetail.backToProducts}
       </Link>
 
       <div className={styles.layout}>
@@ -44,13 +48,13 @@ export default function ProductDetail({ product }: ProductDetailProps) {
         </div>
 
         <div className={styles.info}>
-          <span className={styles.category}>{product.category}</span>
+          <span className={styles.category}>{categoryLabel}</span>
           <h1 className={styles.name}>{product.name}</h1>
           <p className={styles.price}>${product.price.toFixed(2)}</p>
           <p className={styles.description}>{product.description}</p>
 
           <button className={styles.addBtn} onClick={handleAddToCart}>
-            Add to Cart
+            {t.productDetail.addToCart}
           </button>
         </div>
       </div>

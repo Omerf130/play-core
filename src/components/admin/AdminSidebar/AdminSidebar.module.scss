@@ -11,6 +11,13 @@
   padding: 24px 16px;
   z-index: 50;
   overflow-y: auto;
+
+  [dir="rtl"] & {
+    left: auto;
+    right: 0;
+    border-right: none;
+    border-left: 1px solid var(--border);
+  }
 }
 
 .brand {
@@ -120,8 +127,33 @@
   text-align: left;
   transition: background 0.2s;
 
+  [dir="rtl"] & {
+    text-align: right;
+  }
+
   &:hover {
     background: rgba(255, 61, 113, 0.08);
+  }
+}
+
+.langToggle {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  padding: 8px 12px;
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--text-secondary);
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-md);
+  transition: all 0.2s;
+
+  &:hover {
+    color: var(--accent);
+    border-color: var(--accent);
+    background: rgba(0, 255, 255, 0.06);
   }
 }
 
@@ -139,6 +171,11 @@
   border: 1px solid var(--border);
   border-radius: var(--radius-md);
   color: var(--text-primary);
+
+  [dir="rtl"] & {
+    left: auto;
+    right: 16px;
+  }
 }
 
 .bar {
@@ -198,11 +235,20 @@
     transform: translateX(-100%);
     transition: transform 0.3s ease;
     box-shadow: none;
+
+    [dir="rtl"] & {
+      transform: translateX(100%);
+    }
   }
 
   .sidebarOpen {
     transform: translateX(0);
     box-shadow: 4px 0 24px rgba(0, 0, 0, 0.5);
+
+    [dir="rtl"] & {
+      transform: translateX(0);
+      box-shadow: -4px 0 24px rgba(0, 0, 0, 0.5);
+    }
   }
 
   .overlay {

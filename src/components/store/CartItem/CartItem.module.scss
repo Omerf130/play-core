@@ -115,6 +115,10 @@
   color: var(--accent);
   min-width: 80px;
   text-align: right;
+
+  [dir="rtl"] & {
+    text-align: left;
+  }
 }
 
 .removeBtn {
@@ -150,6 +154,11 @@
     width: 100%;
     justify-content: space-between;
     padding-left: 110px;
+
+    [dir="rtl"] & {
+      padding-left: 0;
+      padding-right: 110px;
+    }
   }
 
   .lineTotal {

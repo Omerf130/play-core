@@ -3,6 +3,7 @@
 import { useState, useEffect, useRef } from "react";
 import { useRouter } from "next/navigation";
 import { Button, Input } from "@/components/ui";
+import { useTranslation } from "@/contexts/LanguageContext";
 import styles from "./page.module.scss";
 
 export default function AdminLoginPage() {
@@ -11,6 +12,7 @@ export default function AdminLoginPage() {
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
+  const { t } = useTranslation();
 
   useEffect(() => {
     passwordRef.current?.focus();
@@ -30,13 +32,13 @@ export default function AdminLoginPage() {
 
       if (!res.ok) {
         const data = await res.json();
-        setError(data.error || "Login failed");
+        setError(data.error || t.adminLogin.loginFailed);
         return;
       }
 
       router.push("/admin");
     } catch {
-      setError("Network error. Please try again.");
+      setError(t.adminLogin.networkError);
     } finally {
       setLoading(false);
     }
@@ -47,22 +49,22 @@ export default function AdminLoginPage() {
       <form onSubmit={handleSubmit} className={styles.card}>
         <div className={styles.header}>
           <span className={styles.logo}>PlayCore</span>
-          <span className={styles.badge}>Admin</span>
+          <span className={styles.badge}>{t.adminLogin.admin}</span>
         </div>
-        <p className={styles.subtitle}>Enter your admin password to continue</p>
+        <p className={styles.subtitle}>{t.adminLogin.subtitle}</p>
 
         <Input
           ref={passwordRef}
           type="password"
-          label="Password"
-          placeholder="Enter admin password"
+          label={t.adminLogin.password}
+          placeholder={t.adminLogin.passwordPlaceholder}
           value={password}
           onChange={(e) => setPassword(e.target.value)}
           error={error}
         />
 
         <Button type="submit" fullWidth loading={loading} size="lg">
-          Sign In
+          {t.adminLogin.signIn}
         </Button>
       </form>
     </div>

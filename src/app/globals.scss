@@ -116,3 +116,13 @@ select {
     --header-height: 60px;
   }
 }
+
+[dir="rtl"] {
+  text-align: right;
+
+  input,
+  textarea,
+  select {
+    text-align: right;
+  }
+}

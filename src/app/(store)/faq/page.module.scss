@@ -74,6 +74,10 @@
   line-height: 1.4;
   transition: color 0.2s;
 
+  [dir="rtl"] & {
+    text-align: right;
+  }
+
   &:hover {
     color: var(--accent);
   }

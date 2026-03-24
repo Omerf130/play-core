@@ -3,6 +3,7 @@
 import { useRouter, useSearchParams } from "next/navigation";
 import { useState, useCallback } from "react";
 import { PRODUCT_CATEGORIES, ProductCategory } from "@/types";
+import { useTranslation } from "@/contexts/LanguageContext";
 import styles from "./ProductFilters.module.scss";
 
 interface ProductFiltersProps {
@@ -17,6 +18,7 @@ export default function ProductFilters({
   const router = useRouter();
   const searchParams = useSearchParams();
   const [search, setSearch] = useState(searchQuery);
+  const { t } = useTranslation();
 
   const updateFilters = useCallback(
     (category?: string, query?: string) => {
@@ -53,13 +55,13 @@ export default function ProductFilters({
       <form onSubmit={handleSearch} className={styles.searchForm}>
         <input
           type="text"
-          placeholder="Search products..."
+          placeholder={t.products.searchPlaceholder}
           value={search}
           onChange={(e) => setSearch(e.target.value)}
           className={styles.searchInput}
         />
         <button type="submit" className={styles.searchBtn}>
-          Search
+          {t.products.search}
         </button>
       </form>
 
@@ -68,15 +70,15 @@ export default function ProductFilters({
           className={`${styles.categoryBtn} ${!activeCategory ? styles.active : ""}`}
           onClick={() => handleCategoryClick(undefined)}
         >
-          All
+          {t.products.all}
         </button>
-        {PRODUCT_CATEGORIES.map(({ value, label }) => (
+        {PRODUCT_CATEGORIES.map(({ value }) => (
           <button
             key={value}
             className={`${styles.categoryBtn} ${activeCategory === value ? styles.active : ""}`}
             onClick={() => handleCategoryClick(value)}
           >
-            {label}
+            {t.common.categories[value] || value}
           </button>
         ))}
       </div>

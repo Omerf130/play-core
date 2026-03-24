@@ -4,6 +4,7 @@ import { useState, useRef } from "react";
 import { Button, Input } from "@/components/ui";
 import { PRODUCT_CATEGORIES } from "@/types";
 import type { IProduct, ProductCategory } from "@/types";
+import { useTranslation } from "@/contexts/LanguageContext";
 import styles from "./ProductForm.module.scss";
 
 interface ProductFormProps {
@@ -28,13 +29,14 @@ export default function ProductForm({
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
   const fileRef = useRef<HTMLInputElement>(null);
+  const { t } = useTranslation();
 
   const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
     if (!file) return;
 
     if (file.size > 5 * 1024 * 1024) {
-      setError("Image must be under 5MB");
+      setError(t.productForm.imageTooLarge);
       return;
     }
 
@@ -52,13 +54,13 @@ export default function ProductForm({
     setError("");
 
     if (!name.trim() || !description.trim() || !price) {
-      setError("Please fill in all required fields");
+      setError(t.productForm.fillRequired);
       return;
     }
 
     const priceNum = parseFloat(price);
     if (isNaN(priceNum) || priceNum < 0) {
-      setError("Please enter a valid price");
+      setError(t.productForm.invalidPrice);
       return;
     }
 
@@ -84,12 +86,12 @@ export default function ProductForm({
 
       if (!res.ok) {
         const data = await res.json();
-        throw new Error(data.error || "Failed to save product");
+        throw new Error(data.error || t.productForm.failedToSave);
       }
 
       onSuccess();
     } catch (err) {
-      setError(err instanceof Error ? err.message : "Something went wrong");
+      setError(err instanceof Error ? err.message : t.productForm.somethingWrong);
     } finally {
       setLoading(false);
     }
@@ -100,18 +102,18 @@ export default function ProductForm({
       {error && <div className={styles.error}>{error}</div>}
 
       <Input
-        label="Product Name"
-        placeholder="e.g. Mechanical Gaming Keyboard"
+        label={t.productForm.productName}
+        placeholder={t.productForm.productNamePlaceholder}
         value={name}
         onChange={(e) => setName(e.target.value)}
         required
       />
 
       <div className={styles.field}>
-        <label className={styles.label}>Description</label>
+        <label className={styles.label}>{t.productForm.description}</label>
         <textarea
           className={styles.textarea}
-          placeholder="Product description..."
+          placeholder={t.productForm.descriptionPlaceholder}
           value={description}
           onChange={(e) => setDescription(e.target.value)}
           rows={3}
@@ -121,9 +123,9 @@ export default function ProductForm({
 
       <div className={styles.row}>
         <Input
-          label="Price ($)"
+          label={t.productForm.price}
           type="number"
-          placeholder="0.00"
+          placeholder={t.productForm.pricePlaceholder}
           step="0.01"
           min="0"
           value={price}
@@ -132,15 +134,15 @@ export default function ProductForm({
         />
 
         <div className={styles.field}>
-          <label className={styles.label}>Category</label>
+          <label className={styles.label}>{t.productForm.category}</label>
           <select
             className={styles.select}
             value={category}
             onChange={(e) => setCategory(e.target.value as ProductCategory)}
           >
-            {PRODUCT_CATEGORIES.map(({ value, label }) => (
+            {PRODUCT_CATEGORIES.map(({ value }) => (
               <option key={value} value={value}>
-                {label}
+                {t.common.categories[value] || value}
               </option>
             ))}
           </select>
@@ -148,7 +150,7 @@ export default function ProductForm({
       </div>
 
       <div className={styles.field}>
-        <label className={styles.label}>Image</label>
+        <label className={styles.label}>{t.productForm.image}</label>
         <div className={styles.imageUpload}>
           {imagePreview && (
             <div className={styles.preview}>
@@ -174,16 +176,16 @@ export default function ProductForm({
             onChange={handleImageChange}
             className={styles.fileInput}
           />
-          <p className={styles.hint}>Max 5MB. Leave empty to keep existing image.</p>
+          <p className={styles.hint}>{t.productForm.imageHint}</p>
         </div>
       </div>
 
       <div className={styles.actions}>
         <Button type="button" variant="secondary" onClick={onCancel}>
-          Cancel
+          {t.common.cancel}
         </Button>
         <Button type="submit" loading={loading}>
-          {product ? "Update Product" : "Create Product"}
+          {product ? t.productForm.updateProduct : t.productForm.createProduct}
         </Button>
       </div>
     </form>

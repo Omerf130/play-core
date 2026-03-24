@@ -3,6 +3,7 @@
 import { useState, useEffect, useRef, useCallback } from "react";
 import toast from "react-hot-toast";
 import { Button } from "@/components/ui";
+import { useTranslation } from "@/contexts/LanguageContext";
 import styles from "./page.module.scss";
 
 interface ImageEditorProps {
@@ -20,6 +21,7 @@ function ImageEditor({ contentKey, label, description, previewLabel, placeholder
   const [saving, setSaving] = useState(false);
   const [removing, setRemoving] = useState(false);
   const fileRef = useRef<HTMLInputElement>(null);
+  const { t } = useTranslation();
 
   const fetchImage = useCallback(async () => {
     try {
@@ -44,12 +46,12 @@ function ImageEditor({ contentKey, label, description, previewLabel, placeholder
     if (!file) return;
 
     if (!file.type.startsWith("image/")) {
-      toast.error("Please select an image file");
+      toast.error(t.adminContent.selectImageFile);
       return;
     }
 
     if (file.size > 5 * 1024 * 1024) {
-      toast.error("Image must be under 5MB");
+      toast.error(t.adminContent.imageUnder5MB);
       return;
     }
 
@@ -61,7 +63,7 @@ function ImageEditor({ contentKey, label, description, previewLabel, placeholder
   const handleSave = async () => {
     const imageData = preview || image;
     if (!imageData) {
-      toast.error("No image selected");
+      toast.error(t.adminContent.noImageSelected);
       return;
     }
 
@@ -80,9 +82,9 @@ function ImageEditor({ contentKey, label, description, previewLabel, placeholder
 
       setImage(imageData);
       setPreview(null);
-      toast.success(`${label} saved`);
+      toast.success(`${label} ${t.adminContent.saved}`);
     } catch (err) {
-      toast.error(err instanceof Error ? err.message : `Failed to save ${label.toLowerCase()}`);
+      toast.error(err instanceof Error ? err.message : t.common.error);
     } finally {
       setSaving(false);
     }
@@ -101,9 +103,9 @@ function ImageEditor({ contentKey, label, description, previewLabel, placeholder
       setImage(null);
       setPreview(null);
       if (fileRef.current) fileRef.current.value = "";
-      toast.success(`${label} removed`);
+      toast.success(`${label} ${t.adminContent.removed}`);
     } catch (err) {
-      toast.error(err instanceof Error ? err.message : `Failed to remove ${label.toLowerCase()}`);
+      toast.error(err instanceof Error ? err.message : t.common.error);
     } finally {
       setRemoving(false);
     }
@@ -125,7 +127,7 @@ function ImageEditor({ contentKey, label, description, previewLabel, placeholder
       </div>
 
       {loading ? (
-        <div className={styles.loading}>Loading...</div>
+        <div className={styles.loading}>{t.common.loading}</div>
       ) : (
         <div className={styles.heroEditor}>
           <div className={styles.previewArea}>
@@ -140,7 +142,7 @@ function ImageEditor({ contentKey, label, description, previewLabel, placeholder
             ) : (
               <div className={styles.placeholder}>
                 <span className={styles.placeholderIcon}>🖼️</span>
-                <p>No image set</p>
+                <p>{t.adminContent.noImageSet}</p>
                 <p className={styles.placeholderHint}>{placeholderText}</p>
               </div>
             )}
@@ -149,7 +151,7 @@ function ImageEditor({ contentKey, label, description, previewLabel, placeholder
           <div className={styles.controls}>
             <div className={styles.fileInput}>
               <label htmlFor={inputId} className={styles.fileLabel}>
-                {displayImage ? "Change Image" : "Upload Image"}
+                {displayImage ? t.adminContent.changeImage : t.adminContent.uploadImage}
               </label>
               <input
                 ref={fileRef}
@@ -165,16 +167,16 @@ function ImageEditor({ contentKey, label, description, previewLabel, placeholder
               {preview && (
                 <>
                   <Button onClick={handleSave} loading={saving}>
-                    Save
+                    {t.common.save}
                   </Button>
                   <Button variant="secondary" onClick={handleCancelPreview}>
-                    Cancel
+                    {t.common.cancel}
                   </Button>
                 </>
               )}
               {image && !preview && (
                 <Button variant="danger" onClick={handleRemove} loading={removing}>
-                  Remove Image
+                  {t.adminContent.removeImage}
                 </Button>
               )}
             </div>
@@ -186,24 +188,26 @@ function ImageEditor({ contentKey, label, description, previewLabel, placeholder
 }
 
 export default function AdminContentPage() {
+  const { t } = useTranslation();
+
   return (
     <div className={styles.page}>
-      <h1 className={styles.title}>Content Management</h1>
+      <h1 className={styles.title}>{t.adminContent.title}</h1>
 
       <ImageEditor
         contentKey="hero_image"
-        label="Hero Image"
-        description="This image appears as the background of the homepage hero section."
-        previewLabel="Hero Background Preview"
-        placeholderText="Upload an image to use as the homepage hero background"
+        label={t.adminContent.heroLabel}
+        description={t.adminContent.heroDesc}
+        previewLabel={t.adminContent.heroPreview}
+        placeholderText={t.adminContent.heroPlaceholder}
       />
 
       <ImageEditor
         contentKey="bottom_hero_image"
-        label="Bottom Hero Image"
-        description="This image appears as the background of the bottom CTA section on the homepage."
-        previewLabel="Bottom Hero Preview"
-        placeholderText="Upload an image for the bottom hero section"
+        label={t.adminContent.bottomHeroLabel}
+        description={t.adminContent.bottomHeroDesc}
+        previewLabel={t.adminContent.bottomHeroPreview}
+        placeholderText={t.adminContent.bottomHeroPlaceholder}
       />
     </div>
   );

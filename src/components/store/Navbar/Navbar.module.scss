@@ -75,6 +75,34 @@
   }
 }
 
+.actions {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.langBtn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 44px;
+  height: 44px;
+  font-size: 13px;
+  font-weight: 700;
+  color: var(--text-secondary);
+  background: none;
+  border: 1px solid transparent;
+  border-radius: var(--radius-md);
+  transition: all 0.2s;
+  letter-spacing: 0.03em;
+
+  &:hover {
+    color: var(--accent);
+    border-color: var(--accent);
+    background: rgba(0, 255, 255, 0.06);
+  }
+}
+
 .cartBtn {
   position: relative;
   display: flex;
@@ -107,6 +135,11 @@
   background: var(--accent);
   border-radius: 9px;
   box-shadow: 0 0 10px var(--accent-glow);
+
+  [dir="rtl"] & {
+    right: auto;
+    left: 2px;
+  }
 }
 
 .hamburger {

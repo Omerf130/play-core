@@ -8,11 +8,20 @@
   margin-left: 240px;
   padding: 32px;
   min-height: 100vh;
+
+  [dir="rtl"] & {
+    margin-left: 0;
+    margin-right: 240px;
+  }
 }
 
 @media (max-width: 768px) {
   .main {
     margin-left: 0;
     padding: 72px 16px 32px;
+
+    [dir="rtl"] & {
+      margin-right: 0;
+    }
   }
 }

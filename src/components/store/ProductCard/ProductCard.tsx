@@ -5,6 +5,7 @@ import Link from "next/link";
 import styles from "./ProductCard.module.scss";
 import { IProduct } from "@/types";
 import { useCart } from "@/store/cart";
+import { useTranslation } from "@/contexts/LanguageContext";
 import toast from "react-hot-toast";
 
 interface ProductCardProps {
@@ -13,12 +14,15 @@ interface ProductCardProps {
 
 export default function ProductCard({ product }: ProductCardProps) {
   const addItem = useCart((s) => s.addItem);
+  const { t } = useTranslation();
 
   const handleAddToCart = (e: React.MouseEvent) => {
     e.preventDefault();
     addItem(product);
-    toast.success(`${product.name} added to cart`);
+    toast.success(t.productDetail.addedToCart(product.name));
   };
+
+  const categoryLabel = t.common.categories[product.category] || product.category;
 
   return (
     <Link href={`/products/${product._id}`} className={styles.card}>
@@ -36,7 +40,7 @@ export default function ProductCard({ product }: ProductCardProps) {
             <span>&#127918;</span>
           </div>
         )}
-        <span className={styles.category}>{product.category}</span>
+        <span className={styles.category}>{categoryLabel}</span>
       </div>
 
       <div className={styles.info}>
@@ -45,7 +49,7 @@ export default function ProductCard({ product }: ProductCardProps) {
         <div className={styles.bottom}>
           <span className={styles.price}>${product.price.toFixed(2)}</span>
           <button className={styles.addBtn} onClick={handleAddToCart}>
-            Add to Cart
+            {t.productDetail.addToCart}
           </button>
         </div>
       </div>

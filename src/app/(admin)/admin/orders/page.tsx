@@ -2,6 +2,7 @@
 
 import { useState, useEffect, useCallback } from "react";
 import { Modal } from "@/components/ui";
+import { useTranslation } from "@/contexts/LanguageContext";
 import type { IOrder } from "@/types";
 import styles from "./page.module.scss";
 
@@ -9,6 +10,7 @@ export default function AdminOrdersPage() {
   const [orders, setOrders] = useState<IOrder[]>([]);
   const [loading, setLoading] = useState(true);
   const [selectedOrder, setSelectedOrder] = useState<IOrder | null>(null);
+  const { t } = useTranslation();
 
   const fetchOrders = useCallback(async () => {
     try {
@@ -32,28 +34,28 @@ export default function AdminOrdersPage() {
   return (
     <div className={styles.page}>
       <div className={styles.header}>
-        <h1>Orders</h1>
+        <h1>{t.adminOrders.title}</h1>
         <span className={styles.count}>
-          {orders.length} order{orders.length !== 1 ? "s" : ""}
+          {t.adminOrders.orderCount(orders.length)}
         </span>
       </div>
 
       {loading ? (
-        <div className={styles.loading}>Loading orders...</div>
+        <div className={styles.loading}>{t.adminOrders.loadingOrders}</div>
       ) : orders.length === 0 ? (
-        <div className={styles.empty}>No orders yet.</div>
+        <div className={styles.empty}>{t.adminOrders.noOrdersYet}</div>
       ) : (
         <div className={styles.tableWrap}>
           <table className={styles.table}>
             <thead>
               <tr>
-                <th>Order ID</th>
-                <th>Customer</th>
-                <th>Email</th>
-                <th>Items</th>
-                <th>Total</th>
-                <th>Status</th>
-                <th>Date</th>
+                <th>{t.adminOrders.orderIdCol}</th>
+                <th>{t.adminOrders.customerCol}</th>
+                <th>{t.adminOrders.emailCol}</th>
+                <th>{t.adminOrders.itemsCol}</th>
+                <th>{t.adminOrders.totalCol}</th>
+                <th>{t.adminOrders.statusCol}</th>
+                <th>{t.adminOrders.dateCol}</th>
               </tr>
             </thead>
             <tbody>
@@ -90,20 +92,20 @@ export default function AdminOrdersPage() {
       <Modal
         isOpen={!!selectedOrder}
         onClose={() => setSelectedOrder(null)}
-        title={`Order #${selectedOrder?._id.slice(-8) || ""}`}
+        title={`${t.adminOrders.orderPrefix}${selectedOrder?._id.slice(-8) || ""}`}
       >
         {selectedOrder && (
           <div className={styles.orderDetail}>
             <div className={styles.detailRow}>
-              <span className={styles.detailLabel}>Customer</span>
+              <span className={styles.detailLabel}>{t.adminOrders.customerLabel}</span>
               <span>{selectedOrder.customerName}</span>
             </div>
             <div className={styles.detailRow}>
-              <span className={styles.detailLabel}>Email</span>
+              <span className={styles.detailLabel}>{t.adminOrders.emailLabel}</span>
               <span>{selectedOrder.customerEmail}</span>
             </div>
             <div className={styles.detailRow}>
-              <span className={styles.detailLabel}>Status</span>
+              <span className={styles.detailLabel}>{t.adminOrders.statusLabel}</span>
               <span
                 className={`${styles.statusBadge} ${
                   styles[selectedOrder.paymentStatus]
@@ -113,14 +115,14 @@ export default function AdminOrdersPage() {
               </span>
             </div>
             <div className={styles.detailRow}>
-              <span className={styles.detailLabel}>Date</span>
+              <span className={styles.detailLabel}>{t.adminOrders.dateLabel}</span>
               <span>
                 {new Date(selectedOrder.createdAt).toLocaleString()}
               </span>
             </div>
             {selectedOrder.paypalOrderId && (
               <div className={styles.detailRow}>
-                <span className={styles.detailLabel}>PayPal ID</span>
+                <span className={styles.detailLabel}>{t.adminOrders.paypalIdLabel}</span>
                 <span className={styles.mono}>
                   {selectedOrder.paypalOrderId}
                 </span>
@@ -128,7 +130,7 @@ export default function AdminOrdersPage() {
             )}
 
             <div className={styles.itemsSection}>
-              <h4>Items</h4>
+              <h4>{t.adminOrders.itemsLabel}</h4>
               <div className={styles.itemsList}>
                 {selectedOrder.products.map((item, i) => (
                   <div key={i} className={styles.orderItem}>
@@ -143,7 +145,7 @@ export default function AdminOrdersPage() {
                 ))}
               </div>
               <div className={styles.orderTotal}>
-                <span>Total</span>
+                <span>{t.cart.total}</span>
                 <span>${selectedOrder.totalPrice.toFixed(2)}</span>
               </div>
             </div>

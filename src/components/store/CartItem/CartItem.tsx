@@ -4,6 +4,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { useCart } from "@/store/cart";
 import type { ICartItem } from "@/types";
+import { useTranslation } from "@/contexts/LanguageContext";
 import toast from "react-hot-toast";
 import styles from "./CartItem.module.scss";
 
@@ -14,11 +15,14 @@ interface CartItemProps {
 export default function CartItem({ item }: CartItemProps) {
   const { updateQuantity, removeItem } = useCart();
   const { product, quantity } = item;
+  const { t } = useTranslation();
 
   const handleRemove = () => {
     removeItem(product._id);
-    toast.success(`${product.name} removed from cart`);
+    toast.success(t.cart.removedFromCart(product.name));
   };
+
+  const categoryLabel = t.common.categories[product.category] || product.category;
 
   return (
     <div className={styles.item}>
@@ -42,8 +46,8 @@ export default function CartItem({ item }: CartItemProps) {
         <Link href={`/products/${product._id}`} className={styles.name}>
           {product.name}
         </Link>
-        <span className={styles.category}>{product.category}</span>
-        <span className={styles.unitPrice}>${product.price.toFixed(2)} each</span>
+        <span className={styles.category}>{categoryLabel}</span>
+        <span className={styles.unitPrice}>${product.price.toFixed(2)} {t.cart.each}</span>
       </div>
 
       <div className={styles.controls}>

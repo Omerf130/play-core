@@ -4,6 +4,7 @@ import Product from "@/models/Product";
 import SiteContent from "@/models/SiteContent";
 import ProductGrid from "@/components/store/ProductGrid/ProductGrid";
 import { IProduct } from "@/types";
+import { getLocaleFromCookies, getTranslations } from "@/lib/i18n";
 import styles from "./page.module.scss";
 
 export const dynamic = "force-dynamic";
@@ -34,11 +35,15 @@ async function getBottomHeroImage(): Promise<string | null> {
 }
 
 export default async function Home() {
-  const [featured, heroImage, bottomHeroImage] = await Promise.all([
+  const [featured, heroImage, bottomHeroImage, locale] = await Promise.all([
     getFeaturedProducts(),
     getHeroImage(),
     getBottomHeroImage(),
+    getLocaleFromCookies(),
   ]);
+
+  const t = getTranslations(locale);
+  const dir = locale === "he" ? "rtl" : "ltr";
 
   return (
     <>
@@ -48,22 +53,21 @@ export default async function Home() {
       >
         {heroImage && <div className={styles.heroOverlay} />}
         <div className={styles.heroContent}>
-          <span className={styles.badge}>New Arrivals</span>
+          <span className={styles.badge}>{t.home.heroBadge}</span>
           <h1 className={styles.title}>
-            Level Up Your
+            {t.home.heroTitle1}
             <br />
-            <span className={styles.accent}>Gaming Setup</span>
+            <span className={styles.accent}>{t.home.heroTitle2}</span>
           </h1>
           <p className={styles.subtitle}>
-            Premium keyboards, mice, headsets and controllers built for
-            competitive players who demand the best.
+            {t.home.heroSubtitle}
           </p>
           <div className={styles.actions}>
             <Link href="/products" className={styles.primaryBtn}>
-              Shop Now
+              {t.home.shopNow}
             </Link>
             <Link href="/products?category=keyboards" className={styles.secondaryBtn}>
-              Browse Keyboards
+              {t.home.browseKeyboards}
             </Link>
           </div>
         </div>
@@ -71,16 +75,16 @@ export default async function Home() {
 
       <section className={styles.featured}>
         <div className={styles.sectionHeader}>
-          <h2>Featured Products</h2>
+          <h2>{t.home.featuredProducts}</h2>
           <Link href="/products" className={styles.viewAll}>
-            View All &rarr;
+            {t.home.viewAll} {dir === "rtl" ? "\u2190" : "\u2192"}
           </Link>
         </div>
         <ProductGrid products={featured} />
       </section>
 
       <section className={styles.perks}>
-        <h2 className={styles.perksTitle}>Why Shop With Us</h2>
+        <h2 className={styles.perksTitle}>{t.home.whyShopWithUs}</h2>
         <div className={styles.perksGrid}>
           <div className={styles.perkCard}>
             <div className={styles.perkIcon}>
@@ -90,8 +94,8 @@ export default async function Home() {
                 <line x1="12" y1="22.08" x2="12" y2="12" />
               </svg>
             </div>
-            <h3>Free Shipping</h3>
-            <p>Enjoy free delivery on all orders over $50, straight to your door.</p>
+            <h3>{t.home.freeShipping}</h3>
+            <p>{t.home.freeShippingDesc}</p>
           </div>
           <div className={styles.perkCard}>
             <div className={styles.perkIcon}>
@@ -100,8 +104,8 @@ export default async function Home() {
                 <path d="M3.51 15a9 9 0 1 0 2.13-9.36L1 10" />
               </svg>
             </div>
-            <h3>Easy Returns</h3>
-            <p>Not satisfied? Return eligible items within 30 days, hassle-free.</p>
+            <h3>{t.home.easyReturns}</h3>
+            <p>{t.home.easyReturnsDesc}</p>
           </div>
           <div className={styles.perkCard}>
             <div className={styles.perkIcon}>
@@ -109,13 +113,13 @@ export default async function Home() {
                 <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z" />
               </svg>
             </div>
-            <h3>24/7 Support</h3>
-            <p>Our gaming experts are available around the clock to help you out.</p>
+            <h3>{t.home.support247}</h3>
+            <p>{t.home.support247Desc}</p>
           </div>
         </div>
         <div className={styles.perksAction}>
           <Link href="/faq" className={styles.faqLink}>
-            View All FAQs
+            {t.home.viewAllFAQs}
           </Link>
         </div>
       </section>
@@ -127,12 +131,12 @@ export default async function Home() {
         >
           <div className={styles.bottomHeroOverlay} />
           <div className={styles.bottomHeroContent}>
-            <h2 className={styles.bottomHeroTitle}>Got Questions?</h2>
+            <h2 className={styles.bottomHeroTitle}>{t.home.bottomHeroTitle}</h2>
             <p className={styles.bottomHeroSubtitle}>
-              We&apos;re here to help you find the perfect gear for your setup.
+              {t.home.bottomHeroSubtitle}
             </p>
             <Link href="/contact" className={styles.contactBtn}>
-              Contact Us
+              {t.home.bottomHeroBtn}
             </Link>
           </div>
         </section>

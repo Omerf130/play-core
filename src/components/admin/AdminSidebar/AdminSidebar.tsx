@@ -3,19 +3,21 @@
 import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
 import { useState } from "react";
+import { useTranslation } from "@/contexts/LanguageContext";
 import styles from "./AdminSidebar.module.scss";
-
-const navLinks = [
-  { href: "/admin", label: "Dashboard", icon: "📊" },
-  { href: "/admin/products", label: "Products", icon: "📦" },
-  { href: "/admin/orders", label: "Orders", icon: "🧾" },
-  { href: "/admin/content", label: "Content", icon: "✏️" },
-];
 
 export default function AdminSidebar() {
   const pathname = usePathname();
   const router = useRouter();
   const [mobileOpen, setMobileOpen] = useState(false);
+  const { t, locale, setLocale } = useTranslation();
+
+  const navLinks = [
+    { href: "/admin", label: t.admin.dashboard, icon: "📊" },
+    { href: "/admin/products", label: t.admin.products, icon: "📦" },
+    { href: "/admin/orders", label: t.admin.orders, icon: "🧾" },
+    { href: "/admin/content", label: t.admin.content, icon: "✏️" },
+  ];
 
   const handleLogout = async () => {
     await fetch("/api/admin/logout", { method: "POST" });
@@ -41,7 +43,7 @@ export default function AdminSidebar() {
         <div className={styles.brand}>
           <Link href="/admin" className={styles.logo}>
             <span className={styles.logoText}>PlayCore</span>
-            <span className={styles.badge}>Admin</span>
+            <span className={styles.badge}>{t.adminLogin.admin}</span>
           </Link>
         </div>
 
@@ -60,11 +62,17 @@ export default function AdminSidebar() {
         </nav>
 
         <div className={styles.bottom}>
+          <button
+            className={styles.langToggle}
+            onClick={() => setLocale(locale === "he" ? "en" : "he")}
+          >
+            {locale === "he" ? "EN" : "HE"} — {locale === "he" ? "English" : "עברית"}
+          </button>
           <Link href="/" className={styles.storeLink} onClick={() => setMobileOpen(false)}>
-            ← Back to Store
+            {locale === "he" ? "→" : "←"} {t.admin.backToStore}
           </Link>
           <button className={styles.logoutBtn} onClick={handleLogout}>
-            Logout
+            {t.admin.logout}
           </button>
         </div>
       </aside>

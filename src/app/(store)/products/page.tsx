@@ -3,6 +3,7 @@ import Product from "@/models/Product";
 import ProductGrid from "@/components/store/ProductGrid/ProductGrid";
 import ProductFilters from "@/components/store/ProductFilters/ProductFilters";
 import type { IProduct, ProductCategory } from "@/types";
+import { getLocaleFromCookies, getTranslations } from "@/lib/i18n";
 import styles from "./page.module.scss";
 
 interface ProductsPageProps {
@@ -34,17 +35,19 @@ export default async function ProductsPage({ searchParams }: ProductsPageProps) 
   const category = params.category;
   const search = params.search;
   const products = await getProducts(category, search);
+  const locale = await getLocaleFromCookies();
+  const t = getTranslations(locale);
+
+  const categoryLabel = category
+    ? (t.common.categories[category] || category.charAt(0).toUpperCase() + category.slice(1))
+    : t.products.allProducts;
 
   return (
     <div className={styles.page}>
       <div className={styles.header}>
-        <h1>
-          {category
-            ? category.charAt(0).toUpperCase() + category.slice(1)
-            : "All Products"}
-        </h1>
+        <h1>{categoryLabel}</h1>
         <p className={styles.count}>
-          {products.length} product{products.length !== 1 ? "s" : ""}
+          {t.products.productCount(products.length)}
         </p>
       </div>
 

@@ -3,19 +3,21 @@
 import Link from "next/link";
 import { useCart } from "@/store/cart";
 import CartItem from "@/components/store/CartItem/CartItem";
+import { useTranslation } from "@/contexts/LanguageContext";
 import styles from "./page.module.scss";
 
 export default function CartPage() {
   const { items, totalPrice, clearCart } = useCart();
+  const { t, dir } = useTranslation();
 
   if (items.length === 0) {
     return (
       <div className={styles.empty}>
         <span className={styles.emptyIcon}>&#128722;</span>
-        <h1>Your cart is empty</h1>
-        <p>Looks like you haven&apos;t added any items yet.</p>
+        <h1>{t.cart.emptyTitle}</h1>
+        <p>{t.cart.emptySubtitle}</p>
         <Link href="/products" className={styles.shopLink}>
-          Browse Products
+          {t.cart.browseProducts}
         </Link>
       </div>
     );
@@ -24,9 +26,9 @@ export default function CartPage() {
   return (
     <div className={styles.page}>
       <div className={styles.header}>
-        <h1>Shopping Cart</h1>
+        <h1>{t.cart.title}</h1>
         <button className={styles.clearBtn} onClick={clearCart}>
-          Clear Cart
+          {t.cart.clearCart}
         </button>
       </div>
 
@@ -38,26 +40,26 @@ export default function CartPage() {
         </div>
 
         <aside className={styles.summary}>
-          <h2>Order Summary</h2>
+          <h2>{t.cart.orderSummary}</h2>
           <div className={styles.summaryRows}>
             <div className={styles.row}>
-              <span>Items ({items.reduce((s, i) => s + i.quantity, 0)})</span>
+              <span>{t.cart.items} ({items.reduce((s, i) => s + i.quantity, 0)})</span>
               <span>${totalPrice().toFixed(2)}</span>
             </div>
             <div className={styles.row}>
-              <span>Shipping</span>
-              <span className={styles.free}>Free</span>
+              <span>{t.cart.shipping}</span>
+              <span className={styles.free}>{t.cart.free}</span>
             </div>
           </div>
           <div className={styles.total}>
-            <span>Total</span>
+            <span>{t.cart.total}</span>
             <span>${totalPrice().toFixed(2)}</span>
           </div>
           <Link href="/checkout" className={styles.checkoutBtn}>
-            Proceed to Checkout
+            {t.cart.proceedToCheckout}
           </Link>
           <Link href="/products" className={styles.continueShopping}>
-            &larr; Continue Shopping
+            {dir === "rtl" ? "" : "\u2190 "}{t.cart.continueShopping}{dir === "rtl" ? " \u2192" : ""}
           </Link>
         </aside>
       </div>

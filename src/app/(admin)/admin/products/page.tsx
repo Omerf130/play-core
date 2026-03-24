@@ -4,6 +4,7 @@ import { useState, useEffect, useCallback } from "react";
 import toast from "react-hot-toast";
 import { Button, Modal } from "@/components/ui";
 import ProductForm from "@/components/admin/ProductForm/ProductForm";
+import { useTranslation } from "@/contexts/LanguageContext";
 import type { IProduct } from "@/types";
 import styles from "./page.module.scss";
 
@@ -15,6 +16,7 @@ export default function AdminProductsPage() {
   const [deleteTarget, setDeleteTarget] = useState<IProduct | null>(null);
   const [deleting, setDeleting] = useState(false);
   const [togglingId, setTogglingId] = useState<string | null>(null);
+  const { t } = useTranslation();
 
   const fetchProducts = useCallback(async () => {
     try {
@@ -61,9 +63,9 @@ export default function AdminProductsPage() {
         throw new Error(err.error || "Failed to update");
       }
       await fetchProducts();
-      toast.success(product.isPromoted ? "Removed from featured" : "Added to featured");
+      toast.success(product.isPromoted ? t.adminProducts.removedFromFeatured : t.adminProducts.addedToFeatured);
     } catch (err) {
-      toast.error(err instanceof Error ? err.message : "Failed to toggle promoted");
+      toast.error(err instanceof Error ? err.message : t.adminProducts.failedToToggle);
     } finally {
       setTogglingId(null);
     }
@@ -87,28 +89,28 @@ export default function AdminProductsPage() {
   return (
     <div className={styles.page}>
       <div className={styles.header}>
-        <h1>Products</h1>
-        <Button onClick={handleAdd}>+ Add Product</Button>
+        <h1>{t.adminProducts.title}</h1>
+        <Button onClick={handleAdd}>{t.adminProducts.addProduct}</Button>
       </div>
 
       {loading ? (
-        <div className={styles.loading}>Loading products...</div>
+        <div className={styles.loading}>{t.adminProducts.loadingProducts}</div>
       ) : products.length === 0 ? (
         <div className={styles.empty}>
-          <p>No products yet.</p>
-          <Button onClick={handleAdd}>Create your first product</Button>
+          <p>{t.adminProducts.noProductsYet}</p>
+          <Button onClick={handleAdd}>{t.adminProducts.createFirst}</Button>
         </div>
       ) : (
         <div className={styles.tableWrap}>
           <table className={styles.table}>
             <thead>
               <tr>
-                <th>Image</th>
-                <th>Name</th>
-                <th>Category</th>
-                <th>Price</th>
-                <th>Featured</th>
-                <th>Actions</th>
+                <th>{t.adminProducts.imageCol}</th>
+                <th>{t.adminProducts.nameCol}</th>
+                <th>{t.adminProducts.categoryCol}</th>
+                <th>{t.adminProducts.priceCol}</th>
+                <th>{t.adminProducts.featuredCol}</th>
+                <th>{t.adminProducts.actionsCol}</th>
               </tr>
             </thead>
             <tbody>
@@ -127,7 +129,7 @@ export default function AdminProductsPage() {
                   <td className={styles.nameCell}>{product.name}</td>
                   <td>
                     <span className={styles.categoryBadge}>
-                      {product.category}
+                      {t.common.categories[product.category] || product.category}
                     </span>
                   </td>
                   <td className={styles.priceCell}>
@@ -138,7 +140,7 @@ export default function AdminProductsPage() {
                       className={`${styles.toggle} ${product.isPromoted ? styles.toggleOn : ""}`}
                       onClick={() => handleTogglePromoted(product)}
                       disabled={togglingId === product._id}
-                      title={product.isPromoted ? "Remove from featured" : "Add to featured"}
+                      title={product.isPromoted ? t.adminProducts.removeFromFeatured : t.adminProducts.addToFeatured}
                     >
                       <span className={styles.toggleKnob} />
                     </button>
@@ -150,14 +152,14 @@ export default function AdminProductsPage() {
                         size="sm"
                         onClick={() => handleEdit(product)}
                       >
-                        Edit
+                        {t.common.edit}
                       </Button>
                       <Button
                         variant="danger"
                         size="sm"
                         onClick={() => setDeleteTarget(product)}
                       >
-                        Delete
+                        {t.common.delete}
                       </Button>
                     </div>
                   </td>
@@ -174,7 +176,7 @@ export default function AdminProductsPage() {
           setShowForm(false);
           setEditProduct(undefined);
         }}
-        title={editProduct ? "Edit Product" : "Add Product"}
+        title={editProduct ? t.adminProducts.editProduct : t.adminProducts.addProductTitle}
       >
         <ProductForm
           product={editProduct}
@@ -189,20 +191,20 @@ export default function AdminProductsPage() {
       <Modal
         isOpen={!!deleteTarget}
         onClose={() => setDeleteTarget(null)}
-        title="Delete Product"
+        title={t.adminProducts.deleteProduct}
       >
         <div className={styles.deleteConfirm}>
           <p>
-            Are you sure you want to delete{" "}
+            {t.adminProducts.deleteConfirm}{" "}
             <strong>{deleteTarget?.name}</strong>?
           </p>
-          <p className={styles.deleteWarn}>This action cannot be undone.</p>
+          <p className={styles.deleteWarn}>{t.adminProducts.deleteWarn}</p>
           <div className={styles.deleteActions}>
             <Button variant="secondary" onClick={() => setDeleteTarget(null)}>
-              Cancel
+              {t.common.cancel}
             </Button>
             <Button variant="danger" loading={deleting} onClick={handleDelete}>
-              Delete
+              {t.common.delete}
             </Button>
           </div>
         </div>
