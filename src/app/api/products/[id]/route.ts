@@ -48,7 +48,7 @@ export async function PUT(request: NextRequest, { params }: RouteParams) {
 
     const product = await Product.findByIdAndUpdate(
       id,
-      updateFields,
+      { $set: updateFields },
       { new: true, runValidators: true }
     ).lean();
 

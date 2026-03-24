@@ -9,6 +9,7 @@ const navLinks = [
   { href: "/admin", label: "Dashboard", icon: "📊" },
   { href: "/admin/products", label: "Products", icon: "📦" },
   { href: "/admin/orders", label: "Orders", icon: "🧾" },
+  { href: "/admin/content", label: "Content", icon: "✏️" },
 ];
 
 export default function AdminSidebar() {

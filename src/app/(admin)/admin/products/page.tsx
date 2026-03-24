@@ -1,6 +1,7 @@
 "use client";
 
 import { useState, useEffect, useCallback } from "react";
+import toast from "react-hot-toast";
 import { Button, Modal } from "@/components/ui";
 import ProductForm from "@/components/admin/ProductForm/ProductForm";
 import type { IProduct } from "@/types";
@@ -17,7 +18,7 @@ export default function AdminProductsPage() {
 
   const fetchProducts = useCallback(async () => {
     try {
-      const res = await fetch("/api/products");
+      const res = await fetch("/api/products", { cache: "no-store" });
       const data = await res.json();
       setProducts(data);
     } catch (err) {
@@ -50,14 +51,19 @@ export default function AdminProductsPage() {
   const handleTogglePromoted = async (product: IProduct) => {
     setTogglingId(product._id);
     try {
-      await fetch(`/api/products/${product._id}`, {
+      const res = await fetch(`/api/products/${product._id}`, {
         method: "PUT",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ isPromoted: !product.isPromoted }),
       });
-      fetchProducts();
+      if (!res.ok) {
+        const err = await res.json();
+        throw new Error(err.error || "Failed to update");
+      }
+      await fetchProducts();
+      toast.success(product.isPromoted ? "Removed from featured" : "Added to featured");
     } catch (err) {
-      console.error("Failed to toggle promoted:", err);
+      toast.error(err instanceof Error ? err.message : "Failed to toggle promoted");
     } finally {
       setTogglingId(null);
     }
