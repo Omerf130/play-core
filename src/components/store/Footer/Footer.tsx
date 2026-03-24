@@ -22,9 +22,10 @@ export default function Footer() {
 
         <div className={styles.section}>
           <h4>Support</h4>
-          <a href="#">Contact Us</a>
-          <a href="#">Shipping</a>
-          <a href="#">Returns</a>
+          <a href="/contact">Contact Us</a>
+          <a href="/faq">FAQ</a>
+          <a href="/faq">Shipping</a>
+          <a href="/faq">Returns</a>
         </div>
       </div>
 
